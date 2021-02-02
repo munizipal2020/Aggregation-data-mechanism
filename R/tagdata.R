@@ -34,7 +34,7 @@ add_value<-function(data_tag, uuid, time, name, value){
   {return(data_tag)}
 }
 
-#Функция слияния тегированных данных и обычного фрейма данных
+#Функция слияния тегированных данных
 union_data_tag<-function(data1, data2){
   result<-data1
   for (i in c(1:length(data2[,1]))){
@@ -46,12 +46,13 @@ union_data_tag<-function(data1, data2){
 
 #Функция слияния списка обычных фреймов
 create_data_tag<-function(lst){
-  result<-add_tag_data(lst[1])
-  for (i in c(1:length(lst))){
-    result<-union_data_tag(result, lst[i])
+  result<-add_tag_data(lst[[1]])
+  for (i in c(2:length(lst))){
+    result<-union_data_tag(result, add_tag_data(lst[[i]]))
   }
   return(result)
 }
+
 
 #Функция получения имен атрибутов у заданного объекта на определенный промежуток времени без повторения
 get_attribute<-function(dat, uuid, time_lower=NA, time_upper=NA){
