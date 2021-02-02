@@ -1,3 +1,27 @@
+#Построение фрейма тегированных данных
+add_tag_data<-function(D){
+  if (is.data.frame(D))
+  {
+    library(uuid)
+    t<-as.character(as.POSIXlt(Sys.time(), tz = "UTC"))
+    time_m<-c();uuid_m<-c();name<-c();value<-c()
+    for (i in c(1:length(D[,1]))){
+      uuid<-UUIDgenerate()
+      for (j in c(1:length(colnames(D)))){
+        time_m<-c(time_m,t)
+        uuid_m<-c(uuid_m, uuid)
+        name<-c(name, colnames(D)[j])
+        value<-c(value, as.character(D[i,j]))
+      }
+    }
+    result<-data.frame(uuid_m, time_m, name, value)
+    colnames(result)<-c("uuid","time", "name","value")
+    return(result)
+  }
+  else
+    return(NULL)
+}
+
 #Функция добавления нового значения, свойства или объекта
 add_value<-function(data_tag, uuid, time, name, value){
   if (is.na(data_tag$uuid[(data_tag$uuid == uuid) &
