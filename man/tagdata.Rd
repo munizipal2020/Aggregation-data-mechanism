@@ -2,10 +2,11 @@
 \alias{add_tag_data}
 \title{add_tag_data}
 \usage{
-add_tag_data()
+add_tag_data(D)
 }
 \description{
 Получает data.frame тегированных данных.
+D - исходный data.frame
 }
 \examples{
 D1<-read.csv("https://raw.githubusercontent.com/junaart/DataForR/main/model_2.csv", sep=",",header=TRUE)

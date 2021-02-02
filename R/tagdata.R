@@ -1,3 +1,4 @@
+install.packages("uuid")
 #Построение фрейма тегированных данных
 add_tag_data<-function(D){
   if (is.data.frame(D))
@@ -144,4 +145,28 @@ get_value_group<-function(data_list, uuid, name,  time=NA){
     dd<-as.data.frame(data_list[max_index])
     return(get_value(dd, uuid, name, time))
   }
+}
+
+#Функция получения однородный данных
+get_homo_data<-function(dat, list_attr, time){
+  all_uuid<-get_uuid(dat)
+  r<-c()
+  for (i in all_uuid){
+    all_attribute<-as.character(get_attribute(dat, i, NA, time))
+    p<-TRUE
+    for (j in list_attr){
+      if (!(j %in% all_attribute)) {p<-FALSE}
+    }
+    if (p) {r<-c(r,i)}
+  }
+  result<-matrix(data=NA,nrow=length(r), ncol=length(list_attr)+1)
+  for (i in c(1:length(r))){
+    for (j in c(2:(length(list_attr)+1))){
+      result[i,j]<-as.character(get_value(dat,r[i],list_attr[j-1], time))
+    }
+    result[i,1]<-r[i]
+  }
+  result<-data.frame(result)
+  colnames(result)<-c("uuid", list_attr)
+  return(result)
 }
