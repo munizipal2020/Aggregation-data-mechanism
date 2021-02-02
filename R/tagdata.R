@@ -1,4 +1,3 @@
-install.packages("uuid")
 #Построение фрейма тегированных данных
 add_tag_data<-function(D){
   if (is.data.frame(D))
@@ -35,12 +34,21 @@ add_value<-function(data_tag, uuid, time, name, value){
   {return(data_tag)}
 }
 
-#Функция слияния тегированных данных
+#Функция слияния тегированных данных и обычного фрейма данных
 union_data_tag<-function(data1, data2){
   result<-data1
   for (i in c(1:length(data2[,1]))){
     result<-add_value(result,as.character(data2[i,1]), as.character(data2[i,2]),
                       as.character(data2[i,3]), as.character(data2[i,4]))
+  }
+  return(result)
+}
+
+#Функция слияния списка обычных фреймов
+create_data_tag<-function(lst){
+  result<-add_tag_data(lst[1])
+  for (i in c(1:length(lst))){
+    result<-union_data_tag(result, lst[i])
   }
   return(result)
 }
@@ -170,3 +178,5 @@ get_homo_data<-function(dat, list_attr, time){
   colnames(result)<-c("uuid", list_attr)
   return(result)
 }
+
+
